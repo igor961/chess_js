@@ -12,6 +12,6 @@ export default function Figure(colour, name, fmt="svg") {
     r_w_e = (el.offsetWidth - r_w)/2
     r_h = el.offsetHeight * 0.75
     r_h_e = (el.offsetHeight - r_h)/2
-    el.insertAdjacentHTML('afterbegin', '<img id="img'+el.id+'" src="'+path+'" alt="" style="width: '+r_w+'px;height: '+r_h+'px;margin: '+r_h_e+'px '+r_w_e+'px;cursor:pointer;" draggable="true">')
+    el.insertAdjacentHTML('afterbegin', '<img id="'+name+'_'+colour+el.j+'" src="'+path+'" alt="" style="width: '+r_w+'px;height: '+r_h+'px;margin: '+r_h_e+'px '+r_w_e+'px;cursor:pointer;" draggable="true">')
   }
 }
