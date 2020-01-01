@@ -9,17 +9,9 @@ export default function Figure(colour, name, fmt="svg") {
     var path = fmt+"/"+name+"_"+colour+"."+fmt
     var r_w, r_h, r_w_e, r_h_e
     r_w = el.offsetWidth * 0.75
-    r_w_e = (el.offsetWidth - r_w)/2;
+    r_w_e = (el.offsetWidth - r_w)/2
     r_h = el.offsetHeight * 0.75
-    r_h_e = (el.offsetHeight - r_h)/2;
-    el.innerHTML = '<img src="'+path+'" alt="" style="width: '+r_w+'px;height: '+r_h+'px;margin: '+r_h_e+'px '+r_w_e+'px;cursor:pointer;" id="" draggable="true">'
+    r_h_e = (el.offsetHeight - r_h)/2
+    el.insertAdjacentHTML('afterbegin', '<img id="img'+el.id+'" src="'+path+'" alt="" style="width: '+r_w+'px;height: '+r_h+'px;margin: '+r_h_e+'px '+r_w_e+'px;cursor:pointer;" draggable="true">')
   }
-
-  this.go = (from, to) => {
-    if (to.innerHTML=='') {
-      to.innerHTML = from.innerHTML
-      from.innerHTML = ''
-    }
-  }
-
 }
