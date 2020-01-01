@@ -14,7 +14,7 @@ function makeBoard() {
     console.log("Window size", wSize)
     console.log("i elem in Array", position[0][1])
 
-    function createRect(size="50px", colour="black", id=Date.now()) {
+    function createRect(size="50px", colour="black", id) {
       var el = document.createElement("div")
       el.style.width = size
       el.style.height = size
@@ -27,7 +27,7 @@ function makeBoard() {
 
     for (var i=0; i<8;i++) {
       for (var j=0; j<8; j++) {
-        container.append(createRect(wSize/16+"px", ((i+j)%2!==0)?"#a0a0a0":"#eee", i*8+j))
+        container.append(createRect(wSize/16+"px", ((i+j)%2!==0)?"#a0a0a0":"#eee", i+''+j))
       }
     }
     //console.log(rects)
@@ -62,6 +62,7 @@ function makeBoard() {
       var el = e.dataTransfer.getData("el")
       if (!e.target.firstChild)
         e.target.append(document.getElementById(el))
+      console.log(position)
     }) 
   }
 }
