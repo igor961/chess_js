@@ -1,6 +1,47 @@
-import Figure from "./figs/figure.js"
+var config = {
+  fmt: 'svg'
+}
 
-var position;
+function play() {
+  while(true) {
+    //TODO: Game
+    break
+  } 
+}
+
+window.onload = () => {
+  makeBoard()
+  play()
+};
+
+///////////////////////////////////////////////////////////////
+// Model //
+///////////
+
+var position = [
+  [1, 5, 7, 9, 11, 7, 5, 1],
+  [3, 3, 3, 3, 3, 3, 3, 3],
+  [-1, -1, -1, -1, -1, -1, -1, -1],
+  [-1, -1, -1, -1, -1, -1, -1, -1],
+  [-1, -1, -1, -1, -1, -1, -1, -1],
+  [-1, -1, -1, -1, -1, -1, -1, -1],
+  [2, 2, 2, 2, 2, 2, 2, 2],
+  [0, 4, 6, 8, 10, 6, 4, 0],
+];
+
+
+//////////////////////////////////////////////////////////////
+// View //
+//////////
+
+var position_map = [
+  ["rook", "w"], ["rook", "b"], 
+  ["pawn", "w"], ["pawn", "b"], 
+  ["knight", "w"], ["knight", "b"], 
+  ["bishop", "w"], ["bishop", "b"], 
+  ["queen", "w"], ["queen", "b"], 
+  ["king", "w"], ["king", "b"], 
+];
 var l = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
 function makeBoard() {
@@ -33,68 +74,50 @@ function makeBoard() {
         container.append(rect)
       }
     }
-    setFigs(position)
 
-    function setFigs(arr) {
-
-      for (var i=0; i<8;i++) {
-        for (var j=0; j<8; j++) {
-          if (arr[i][j]!=undefined) 
-            arr[i][j].draw(document.getElementById(l[j]+(i+1)));
-        }
+    for (var i=0; i<8; ++i)
+      for (var j=0; j<8; ++j) {
+        var f = position[i][j]
+        if (f === -1) continue;
+        draw.apply(container.children[i*8+j], position_map[f])
       }
-    }
 
-    document.addEventListener('dragstart', function(e) {
-      console.log("OnDragStart")
-      e.dataTransfer.setData("el", e.target.id)
-    })
-
-    container.addEventListener('dragover', function(e) {
-      console.log("OnDragOver")
-      e.preventDefault()
-    })
-
-    container.addEventListener('drop', function(e) {
-      console.log("OnDrop")
-      e.preventDefault()
-      var el = e.dataTransfer.getData("el")
-      if (!e.target.firstChild)
-        e.target.append(document.getElementById(el))
-      console.log(position)
-    }) 
   }
 }
 
-function clearBoard() {
-  position = [[new Figure("b", "rook"), new Figure("b", "knight"), new Figure("b", "bishop"), new Figure("b", "queen"), new Figure("b", "king"), new Figure("b", "bishop"), new Figure("b", "knight"), new Figure("b", "rook")], 
-    [new Figure("b", "pawn"), new Figure("b", "pawn"), new Figure("b", "pawn"), new Figure("b", "pawn"), new Figure("b", "pawn"), new Figure("b", "pawn"), new Figure("b", "pawn"), new Figure("b", "pawn")], 
-    [], 
-    [], 
-    [], 
-    [],
-    [new Figure("w", "pawn"), new Figure("w", "pawn"), new Figure("w", "pawn"), new Figure("w", "pawn"), new Figure("w", "pawn"), new Figure("w", "pawn"), new Figure("w", "pawn"), new Figure("w", "pawn")],
-    [new Figure("w", "rook"), new Figure("w", "knight"), new Figure("w", "bishop"), new Figure("w", "queen"), new Figure("w", "king"), new Figure("w", "bishop"), new Figure("w", "knight"), new Figure("w", "rook")]];
+function draw(name, colour, fmt = config.fmt) {
+  var el = this;
+  console.log(el)
+  var path = fmt+"/"+name+"_"+colour+"."+fmt
+  var r_w, r_h, r_w_e, r_h_e
+  r_w = el.offsetWidth * 0.75
+  r_w_e = (el.offsetWidth - r_w)/2
+  r_h = el.offsetHeight * 0.75
+  r_h_e = (el.offsetHeight - r_h)/2
+  el.insertAdjacentHTML('afterbegin', '<img id="'+name+'_'+colour+el.j+'" src="'+path+'" alt="" style="width: '+r_w+'px;height: '+r_h+'px;margin: '+r_h_e+'px '+r_w_e+'px;cursor:pointer;" draggable="true">')
+}
 
-  for (var i=0; i<8;i++) {
-    for (var j=0; j<8; j++) {
-      if (position[i][j]!=undefined) position[i][j].setId(i+j)
-    }
-  }
+//////////////////////////////////////////////////////////////
+// Controller //
+////////////////
 
+document.addEventListener('dragstart', function(e) {
+  console.log("OnDragStart")
+  e.dataTransfer.setData("el", e.target.id)
+})
+
+document.addEventListener('dragover', function(e) {
+  console.log("OnDragOver")
+  e.preventDefault()
+})
+
+document.addEventListener('drop', function(e) {
+  console.log("OnDrop")
+  e.preventDefault()
+  var el = e.dataTransfer.getData("el")
+  if (!e.target.firstChild)
+    e.target.append(document.getElementById(el))
   console.log(position)
-}
+}) 
 
-function play() {
-  while(true) {
-    //TODO: Game
-    break
-  } 
-}
-
-window.onload = () => {
-  clearBoard()
-  makeBoard()
-  play()
-};
 
