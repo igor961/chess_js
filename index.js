@@ -1,4 +1,4 @@
-import knight from './figs/knight.js'
+import * as knight from './figs/knight.js'
 
 var config = {
   fmt: 'svg',
@@ -46,6 +46,11 @@ var l = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
 function coordsToF(i, j) {
   return l[j]+(8-i)
+}
+
+
+function getNameAndColourFromId(id) {
+  return id.replace(/\d+/g, '').split("_", 2)
 }
 
 //////////
@@ -121,14 +126,19 @@ function listenEvents() {
     console.log("---------------")
     console.log("OnDragStart")
     var parent = e1.target.parentNode
-    var fields = knight.getFields(parent.i, parent.j)
+    var figure = getNameAndColourFromId(e1.target.id)[0]
+    console.log(figure)
+    try {
+      figure = eval(figure);
+    } catch (e) { return; }
+    var fields = figure.getFields(parent.i, parent.j)
     console.log(parent, fields)
     createDropListeners(fields, function(e2) {
       e2.preventDefault()
       var id = e1.target.id
       console.log("ID ", id, "Parent ", parent)
       document.getElementById(id).remove()
-      var nc = id.replace(/\d+/g, '').split("_", 2)
+      var nc = getNameAndColourFromId(id)
       draw.apply(e2.target, nc)
       deleteDropListeners(fields)
     })
