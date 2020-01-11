@@ -4,12 +4,12 @@ import Pair from '../aux/pair.js';
 // Model //
 ///////////
 
-function* model(i, j) {
+function* model(p) {
   for (var k=0; k<8; ++k) {
-    if (k != j)
-      yield new Pair(i, k)
-    if (k != i)
-      yield new Pair(k, j)
+    if (k != p.b)
+      yield new Pair(p.a, k)
+    if (k != p.a)
+      yield new Pair(k, p.b)
   }
 }
 
@@ -23,6 +23,7 @@ function* model(i, j) {
 ////////////////
 
 export function getFields(i, j) {
-  if (new Pair(i, j).valid()) return model(i ,j)
+  var p = new Pair(i, j)
+  if (p.valid()) return model(p)
   return false
 }
