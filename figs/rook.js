@@ -1,6 +1,17 @@
+import Pair from '../aux/pair.js';
+
 ///////////////////////////////////////////////////////////////
 // Model //
 ///////////
+
+function* model(i, j) {
+  for (var k=0; k<8; ++k) {
+    if (k != j)
+      yield new Pair(i, k)
+    if (k != i)
+      yield new Pair(k, j)
+  }
+}
 
 //////////////////////////////////////////////////////////////
 // View //
@@ -11,4 +22,7 @@
 // Controller //
 ////////////////
 
-
+export function getFields(i, j) {
+  if (new Pair(i, j).valid()) return model(i ,j)
+  return false
+}

@@ -1,4 +1,5 @@
 import * as knight from './figs/knight.js'
+import * as rook from './figs/rook.js'
 
 var config = {
   fmt: 'svg',
@@ -130,7 +131,10 @@ function listenEvents() {
     console.log(figure)
     try {
       figure = eval(figure);
-    } catch (e) { return; }
+    } catch (e) {
+      console.log(e).message;
+      return; 
+    }
     var fields = figure.getFields(parent.i, parent.j)
     console.log(parent, fields)
     createDropListeners(fields, function(e2) {
@@ -155,9 +159,9 @@ function listenEvents() {
   })
 
   function createDropListeners(arr, cb) {
-    arr.map(f => {
+    for (var f of arr) {
       document.getElementById(coordsToF(f.a, f.b)).ondrop = cb;
-    })
+    }
   }
 
   function deleteDropListeners(arr) {

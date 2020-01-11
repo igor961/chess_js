@@ -3,17 +3,17 @@ import Pair from '../aux/pair.js';
 ///////////
 // Model //
 ///////////
-function model(i, j) {
-  return [
-    new Pair(i+2, j+1),
-    new Pair(i-2, j+1),
-    new Pair(i-2, j-1),
-    new Pair(i+2, j-1),
-    new Pair(i+1, j+2),
-    new Pair(i-1, j+2),
-    new Pair(i-1, j-2),
-    new Pair(i+1, j-2)
-  ]
+function* model(i, j) {
+  var s = [-1, 1, 1, -1]
+  var p;
+  for (var k=0; k<4; ++k) { 
+    p = new Pair(i+2*s[k%4], j+1*s[(k+1)%4])
+    if (p.valid()) yield p
+  }
+  for (var k=0; k<4; ++k) {
+    p = new Pair(j+1*s[k%4], j+2*s[(k+1)%4])
+    if (p.valid()) yield p
+  }
 }
 
 //////////
@@ -25,9 +25,6 @@ function model(i, j) {
 // Controller //
 ////////////////
 export function getFields (i, j) {
-  var r = []
-  model(i, j).map(f => {
-    if (f.valid()) r.push(f)
-  })
-  return r;
+  if (new Pair(i, j).valid()) return model(i, j)
+  return false
 }
