@@ -11,7 +11,7 @@ function* model(p0, c) {
     if (p0.a == 6) yield new Pair(4, p0.b)
   } else {
     yield p0.plus(new Pair(1, 0)) 
-    if (p0.a == 1) yield new Pair(p0.a, 3)
+    if (p0.a == 1) yield new Pair(3, p0.b)
   }
 }
 
