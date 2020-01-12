@@ -1,4 +1,5 @@
 import Pair from '../aux/pair.js';
+import {getController} from './_common_controller.js';
 
 ///////////////////////////////////////////////////////////////
 // Model //
@@ -22,8 +23,5 @@ function* model(p) {
 // Controller //
 ////////////////
 
-export function getFields(i, j) {
-  var p = new Pair(i, j)
-  if (p.valid()) return model(p)
-  return false
-}
+export var getFields = getController(model)
+

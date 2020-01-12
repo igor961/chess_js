@@ -119,7 +119,7 @@ function makeBoard() {
 
 function draw(name, colour, fmt = config.fmt) {
   var el = this;
-  console.log(el, name, colour)
+  console.log("Draw", el, name, colour)
   var path = fmt+"/"+name+"_"+colour+"."+fmt
   var r_w, r_h, r_w_e, r_h_e
   r_w = el.offsetWidth * 0.75
@@ -136,8 +136,9 @@ function listenEvents() {
   container.addEventListener('dragstart', function(e1) {
     console.log("---------------")
     console.log("OnDragStart")
+    var id = e1.target.id
     var parent = e1.target.parentNode
-    var figureParams = getNameAndColourFromId(e1.target.id)
+    var figureParams = getNameAndColourFromId(id)
     console.log(figureParams)
     var figure
     try {
@@ -151,7 +152,6 @@ function listenEvents() {
     console.log(parent, fields)
     createDropListeners(fields, function(e2) {
       e2.preventDefault()
-      var id = e1.target.id
       console.log("ID ", id, "Parent ", parent)
       document.getElementById(id).remove()
       var nc = getNameAndColourFromId(id)
@@ -171,13 +171,14 @@ function listenEvents() {
   })
 
   function createDropListeners(arr, cb) {
+    console.log("Add listener", arr)
     for (var f of arr) {
-      console.log(f)
       document.getElementById(coordsToId(f.a, f.b)).ondrop = cb;
     }
   }
 
   function deleteDropListeners(arr) {
-    createDropListeners(arr, null)
+    console.log("Delete listener", console.log(arr))
+    createDropListeners(arr, undefined)
   }
 }
