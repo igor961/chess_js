@@ -1,5 +1,6 @@
 import * as knight from './figs/knight.js'
 import * as rook from './figs/rook.js'
+import * as pawn from './figs/pawn.js'
 
 var config = {
   fmt: 'svg',
@@ -45,13 +46,22 @@ function check(ctx = this) {
 
 var l = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
-function coordsToF(i, j) {
+function coordsToId(i, j) {
   return l[j]+(8-i)
 }
 
 
+function idToCoords(id) {
+  var r = id.split('', 2)
+  return [
+    8-parseInt(r[1]), 
+    l.indexOf(r[0])
+  ]
+}
+
+
 function getNameAndColourFromId(id) {
-  return id.replace(/\d+/g, '').split("_", 2)
+  return id.split("_").slice(0, 2)
 }
 
 //////////
@@ -92,8 +102,7 @@ function makeBoard() {
   for (var i=0; i<8;i++) {
     for (var j=0; j<8; j++) {
       var rect = createRect(wSize/16+"px", ((i+j)%2!==0)?"#a0a0a0":"#eee", l[j]+(8-i))
-      rect.id = coordsToF(i, j);
-      [ rect.i, rect.j ] = [ i, j ];
+      rect.id = coordsToId(i, j);
       container.append(rect)
     }
   }
@@ -116,7 +125,7 @@ function draw(name, colour, fmt = config.fmt) {
   r_w_e = (el.offsetWidth - r_w)/2
   r_h = el.offsetHeight * 0.75
   r_h_e = (el.offsetHeight - r_h)/2;
-  el.insertAdjacentHTML('beforeend', '<img id="'+name+'_'+colour+el.j+'" src="'+path+'" alt="" style="width: '+r_w+'px;height: '+r_h+'px;margin: '+r_h_e+'px '+r_w_e+'px;cursor:pointer;" draggable="true">')
+  el.insertAdjacentHTML('beforeend', '<img id="'+name+'_'+colour+"_"+el.id+'" src="'+path+'" alt="" style="width: '+r_w+'px;height: '+r_h+'px;margin: '+r_h_e+'px '+r_w_e+'px;cursor:pointer;" draggable="true">')
 }
 
 ////////////////
@@ -127,15 +136,17 @@ function listenEvents() {
     console.log("---------------")
     console.log("OnDragStart")
     var parent = e1.target.parentNode
-    var figure = getNameAndColourFromId(e1.target.id)[0]
-    console.log(figure)
+    var figureParams = getNameAndColourFromId(e1.target.id)
+    console.log(figureParams)
+    var figure
     try {
-      figure = eval(figure);
+      figure = eval(figureParams[0]);
     } catch (e) {
-      console.log(e).message;
+      console.log(e.message);
       return; 
     }
-    var fields = figure.getFields(parent.i, parent.j)
+    var coords = idToCoords(parent.id)
+    var fields = figure.getFields(coords[0], coords[1], figureParams[1])
     console.log(parent, fields)
     createDropListeners(fields, function(e2) {
       e2.preventDefault()
@@ -160,7 +171,8 @@ function listenEvents() {
 
   function createDropListeners(arr, cb) {
     for (var f of arr) {
-      document.getElementById(coordsToF(f.a, f.b)).ondrop = cb;
+      console.log(f)
+      document.getElementById(coordsToId(f.a, f.b)).ondrop = cb;
     }
   }
 
