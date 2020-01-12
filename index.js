@@ -1,6 +1,7 @@
 import * as knight from './figs/knight.js'
 import * as rook from './figs/rook.js'
 import * as pawn from './figs/pawn.js'
+import * as king from './figs/king.js'
 
 var config = {
   fmt: 'svg',
